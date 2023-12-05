@@ -51,14 +51,22 @@
  */
 char *su_strdup(su_home_t *home, char const *s)
 {
-  if (s) {
-    size_t n = strlen(s);
-    char *retval = su_alloc(home, n + 1);
-    if (retval)
-      snprintf(retval, n + 1, "%s", s);
-    return retval;
-  }
-  return NULL;
+  if (s)
+	{
+		size_t n = strlen(s);
+		char *retval = su_alloc(home, n + 1);
+		if (retval)
+		{
+			for(int i = 0; i < n; i++)
+			{
+				retval[i] = s[i];
+			}
+			retval[n] = '\0';
+			// snprintf(retval, n + 1, "%s", s);
+		}
+		return retval;
+	}
+	return NULL;
 }
 
 /**Concate two strings, allocate memory for result from @a home.
@@ -81,16 +89,16 @@ char *su_strcat(su_home_t *home, char const *s1, char const *s2)
   char *retval;
 
   if (s1 == NULL)
-    return su_strdup(home, s2);
+	return su_strdup(home, s2);
   else if (s2 == NULL)
-    return su_strdup(home, s1);
+	return su_strdup(home, s1);
 
   n1 = strlen(s1); n2 = strlen(s2);
   retval = su_alloc(home, n1 + n2 + 1);
   if (retval) {
-    memcpy(retval, s1, n1);
-    memcpy(retval + n1, s2, n2);
-    retval[n1 + n2] = '\0';
+	memcpy(retval, s1, n1);
+	memcpy(retval + n1, s2, n2);
+	retval[n1 + n2] = '\0';
   }
 
   return retval;
@@ -120,22 +128,22 @@ char *su_strcat_all(su_home_t *home, ...)
   va_start(va, home);
   s = va_arg(va, char *);
   for (n = 0; s; s = va_arg(va, char *), n++)
-    size += strlen(s);
+	size += strlen(s);
   va_end(va);
 
   retval = su_alloc(home, size + 1);
   if (retval) {
-    s = retval;
-    end = s + size + 1;
+	s = retval;
+	end = s + size + 1;
 
-    va_start(va, home);
+	va_start(va, home);
 
-    for (i = 0; i < n; i++)
-      s = (char *)memccpy(s, va_arg(va, char const *), '\0', end - s) - 1;
+	for (i = 0; i < n; i++)
+	  s = (char *)memccpy(s, va_arg(va, char const *), '\0', end - s) - 1;
 
-    va_end(va);
+	va_end(va);
 
-    retval[size] = '\0';
+	retval[size] = '\0';
   }
 
   return retval;
@@ -159,11 +167,19 @@ char *su_strcat_all(su_home_t *home, ...)
  */
 char *su_strndup(su_home_t *home, char const *s, isize_t n)
 {
-  if (s) {
-    char *retval = su_alloc(home, n + 1);
-    if (retval)
-      strncpy(retval, s, n)[n] = 0;
-    return retval;
-  }
-  return NULL;
+	if (s)
+	{
+		char *retval = su_alloc(home, n + 1);
+		if (retval)
+		{
+			for(int i = 0; i < n; i++)
+			{
+				retval[i] = s[i];
+			}
+			retval[n] = '\0';
+			// strncpy(retval, s, n)[n] = 0;
+		}
+		return retval;
+	}
+	return NULL;
 }
